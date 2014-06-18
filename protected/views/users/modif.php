@@ -2,10 +2,6 @@
 /* @var $this UsersController */
 /* @var $model User */
 
-/*echo CHtml::link("Accueil", array('/'));
-echo " | ";
-echo CHtml::link("<strong>Données personnelles</strong>", array('users/view', 'id'=>$user->id));
-*/
 ?>
 
 <style>
@@ -28,7 +24,12 @@ echo CHtml::link("<strong>Données personnelles</strong>", array('users/view', '
 	}
 </style>
 <div class="user">
-	<?php $array=$user->reputation(); echo "<h3>".$user->prenom()." ".$user->nom()."</h3><div class='ratings'><div class='rating' style='width:".$array[0]."%'></div></div> (".$array[1]." votes)";?>
+	<?php $array=$user->reputation(); echo "<h3>".$user->prenom." ".$user->nom."</h3>";
+	if(Yii::app()->params['Votes']=="yes")
+	{
+		echo "<div class='ratings'><div class='rating' style='width:".$array[0]."%'></div></div> (".$array[1]." votes)";
+	}
+	?>
 
 </div>
 <div class="form">
@@ -43,7 +44,10 @@ echo CHtml::link("<strong>Données personnelles</strong>", array('users/view', '
 		<tr>
 			<td><?php echo $form->labelEx($user,'email', array('label' => 'Email personnel')); ?></td>
 			<!--<td><?php //echo $form->textField($user,'email',array('size'=>35,'maxlength'=>60)); ?></td>-->
-			<td><?php echo $form->textField($user,'email',array('size'=>35,'maxlength'=>60)); echo "<br/>Réputation : " . $array[0];?></td>
+			<td><?php echo $form->textField($user,'email',array('size'=>35,'maxlength'=>60)); if(Yii::app()->params['Votes']=="yes")
+	{
+		echo "<br/>Réputation : " . $array[0];
+	}?></td>
 		</tr>
 	
 		<tr>
@@ -56,10 +60,6 @@ echo CHtml::link("<strong>Données personnelles</strong>", array('users/view', '
 			<td><?php echo $form->textField($user,'telephone',array('size'=>35,'maxlength'=>45)); ?></td>
 		</tr>
 
-		<tr>
-			<td><?php echo $form->labelEx($user,'hideTelephone', array('label' => 'Masquer mon téléphone')); ?></td>
-			<td><?php echo $form->checkBox($user,'hideTelephone'); ?></td>
-		</tr>
 		<tr><td colspan="2"><span id='notif'><br/>Je suis averti par email lorsque quelqu'un ...</span></td></tr>
 		<tr>
 			<td><?php echo $form->labelEx($user,'notifInscription', array('label' => ' &nbsp; &nbsp; &nbsp; &nbsp;s\'inscrit à l\'un de mes trajets')); ?></td>
@@ -73,9 +73,14 @@ echo CHtml::link("<strong>Données personnelles</strong>", array('users/view', '
 		</tr>
 
 		<tr>
+			<td><?php echo $form->labelEx($user,'notifValidation', array('label' => ' &nbsp; &nbsp; &nbsp; &nbsp;valide mon inscription pour un trajet')); ?></td>
+			<td><?php echo $form->checkBox($user,'notifValidation'); ?></td>
+		</tr>
+
+		<!--<tr>
 			<td><?php echo $form->labelEx($user,'notifComment', array('label' => ' &nbsp; &nbsp; &nbsp; &nbsp;commente un de mes trajets')); ?></td>
 			<td><?php echo $form->checkBox($user,'notifComment'); ?></td>
-		</tr>
+		</tr>-->
 
 		<tr>
 			<td><?php echo $form->labelEx($user,'notifDeleteRide', array('label' => ' &nbsp; &nbsp; &nbsp; &nbsp;supprime un des trajets auquel je suis inscrit')); ?></td>

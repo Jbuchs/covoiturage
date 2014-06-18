@@ -42,12 +42,13 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hideEmail, hideTelephone, notifInscription, notifComment, notifUnsuscribe, notifDeleteRide, notifModification, blacklisted, admin', 'numerical', 'integerOnly'=>true),
+			array('hideEmail, hideTelephone, notifInscription, notifComment, notifUnsuscribe, notifDeleteRide, notifModification, notifValidation, blacklisted, admin', 'numerical', 'integerOnly'=>true),
 			array('cpnvId, telephone', 'length', 'max'=>45),
 			array('email', 'required', 'message'=>'L\'adresse email fournie ne semble pas être valide'),
 			array('email', 'length', 'max'=>60),
 			array('email', 'email', 'message'=>'L\'adresse email fournie ne semble pas être valide'),
 			array('telephone', 'telephoneStrength'),
+			array('telephone', 'required'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, cpnvId, email, hideEmail, telephone, hideTelephone, notifInscription, notifComment, notifUnsuscribe, notifDeleteRide, notifModification, blacklisted, admin', 'safe', 'on'=>'search'),
@@ -221,15 +222,10 @@ class User extends CActiveRecord
 	public function sendEmail($mail,$subject){
 
 		$mail->IsSMTP();
-		//$mail->setLayout('mail');
-		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@covoiturage.ch', 'covoiturage.ch');
 		$mail->setSubject($subject);
 		$mail->setTo($this->email);
-		//$mail->setBody($text);
 		$mail->Host='mail.cpnv.ch';
 		$mail->send();
 	}
-	
-	
 }

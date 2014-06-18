@@ -33,8 +33,28 @@ $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 
  ?>
 
+<style>
+	#creerRide{
+		
+		display:block;
+		width: 200px;
+		height: 50px;
+		background-image : url(<?php echo Yii::app()->request->baseUrl."/images/bouton.png" ?>);
+	}
+	#creerRide:hover{
+		background-image : url(<?php echo Yii::app()->request->baseUrl."/images/boutonon.png" ?>);
+	}
+	#createRideBackground{
+		width: 100%;
+
+padding-top: 4px;
+padding-bottom: 4px;
+margin-top: 5px;
+		margin-bottom: 26px;
+	}
+</style>
 <?php $this->endWidget(); ?>
- 
+
 <?php
 //affichage des rides auquel l'utilisateur courant est inscrit
 if(count($registrations)!=0){
@@ -63,11 +83,11 @@ if($v[0]==-1 && $r[0]==-1){
 else
 {
 	echo "<table>";
-	echo "<tr><th>Conducteur</th><th>Places</th><th>Départ</th><th>Arrivée</th><th>Jour</th></tr>";
+	//echo "<tr><th>Conducteur</th><th>Places</th><th>Départ</th><th>Arrivée</th><th>Jour</th></tr>";
+	echo "<tr><th>Conducteur</th><th>Départ</th><th>Arrivée</th><th>Jour</th></tr>";
 	$i=0;
 
 	$date=$datetime = date('Y-m-d 00:00:00', time());
-	//$woaw=0;
 	while($i<20 && array_sum($v)<=count($registrations) && array_sum($r)<=count($ridesCurrent))
 	{
 		foreach($registrations as $registration){
@@ -83,7 +103,7 @@ else
 				echo "\"document.location='".Yii::app()->createUrl('rides/view', array('id' => $regRide->id))."?date=".$daydate."';";
 				echo "\" onmouseover='tablein(this);' onmouseout='tableout(this);'>";
 					echo "<td>".$regRide->driver->prenom." ".$regRide->driver->nom."</td>";
-					echo "<td>"."0/".$regRide->seats."</td>";
+					//echo "<td>"."0/".$regRide->seats."</td>";
 					echo "<td>".$regRide->departuretown->name." à ".$regRide->departure."</td>";
 					echo "<td>".$regRide->arrivaltown->name." vers ".$regRide->arrival."</td>";
 				
@@ -138,12 +158,9 @@ else
 				$daydate = date("d-m-Y",strtotime($date));
 				echo "<tr onclick=";
 				echo "\"document.location='".Yii::app()->createUrl('rides/view', array('id' => $rideCurrent->id))."?date=".$daydate."';";
-				//echo "\"document.location='/covoiturage/covoiturage/rides/".$rideCurrent->id."?date=".$daydate."';";
 				echo "\" onmouseover='tablein(this);' onmouseout='tableout(this);'>";
-					echo "<td><img src='/covoiturage/covoiturage/images/driver.png' width='8%'/> ".$rideCurrent->driver->prenom." ".$rideCurrent->driver->nom."</td>";
-						//echo "<td>".$ride->driver->prenom." ".$ride->driver->nom."</td>";
-
-					echo "<td>"."0/".$rideCurrent->seats."</td>";
+					echo "<td><img src='".Yii::app()->request->baseUrl."/images/driver.png' width='6%'/> ".$rideCurrent->driver->prenom." ".$rideCurrent->driver->nom."</td>";
+					//echo "<td>"."0/".$rideCurrent->seats."</td>";
 					echo "<td>".$rideCurrent->departuretown->name." à ".$rideCurrent->departure."</td>";
 					echo "<td>".$rideCurrent->arrivaltown->name." vers ".$rideCurrent->arrival."</td>";
 					switch ($rideCurrent->day) {
@@ -190,13 +207,16 @@ else
 echo "</table>";
 ?>
 
-<hr/>
 
+<center>
+	<div id="createRideBackground">
 <?php
-echo CHtml::link("Créer un nouveau trajet", array('rides/create'));
+echo "<a id='creerRide' href='".Yii::app()->createUrl('rides/create')."'></a>";
+//echo CHtml::link("Créer un nouveau trajet", array('rides/create'));
 ?>
+</div>
+</center>
 
-<hr/>
 
 
 <?php
@@ -213,7 +233,8 @@ if(count($rides)==0){
 }
 else{
 	echo "<table>";
-	echo "<tr><th>Conducteur</th><th>Places</th><th>Départ</th><th>Arrivée</th><th>Jour</th></tr>";
+	//echo "<tr><th>Conducteur</th><th>Places</th><th>Départ</th><th>Arrivée</th><th>Jour</th></tr>";
+	echo "<tr><th>Conducteur</th><th>Départ</th><th>Arrivée</th><th>Jour</th></tr>";
 	$i=0;
 	$date=$datetime = date('Y-m-d 00:00:00', time());
 	while($i<80 && array_sum($r)<count($rides))
@@ -224,12 +245,10 @@ else{
 					$daydate = date("d-m-Y",strtotime($date));
 					echo "<tr onclick=";
 					echo "\"document.location='".Yii::app()->createUrl('rides/view', array('id' => $ride->id))."?date=".$daydate."';";
-					//echo "\"document.location='/covoiturage/covoiturage/rides/".$ride->id."?date=".$daydate."';";
 					echo "\" onmouseover='tablein(this);' onmouseout='tableout(this);'>";
 
-						//echo "<td>".$ride->driver->cpnvId."</td>";
 						echo "<td>".$ride->driver->prenom." ".$ride->driver->nom."</td>";
-						echo "<td>"."0/".$ride->seats."</td>";
+						//echo "<td>"."0/".$ride->seats."</td>";
 						echo "<td>".$ride->departuretown->name." à ".$ride->departure."</td>";
 						echo "<td>".$ride->arrivaltown->name." vers ".$ride->arrival."</td>";
 					
@@ -273,7 +292,10 @@ else{
 	}
 	echo "</table>";
 }
-echo Yii::getLogger()->getExecutionTime();
+if(Yii::app()->params['ExecutionTime']=="yes")
+{
+	echo Yii::getLogger()->getExecutionTime();
+}
 /*
 //afficher 20 trajets en comptant les récurrences
 
